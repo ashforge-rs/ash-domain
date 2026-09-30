@@ -1,0 +1,19 @@
+[package]
+name = "ash-macros"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+authors = ["Giorgos Ntemiris <gntem@users.noreply.github.com>"]
+description = "Derive macros for ash-domain: #[derive(Resource)] and friends"
+license = "Apache-2.0"
+repository = "https://github.com/ashforge-rs/ash-domain"
+keywords = ["derive", "macro", "domain", "resource"]
+categories = ["development-tools::procedural-macro-helpers"]
+
+[lib]
+proc-macro = true
+
+[dependencies]
+syn = "2"
+quote = "1"
+proc-macro2 = "1"

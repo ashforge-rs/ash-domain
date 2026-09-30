@@ -1,0 +1,136 @@
+[package]
+name = "ash-domain"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+authors = ["Giorgos Ntemiris <gntem@users.noreply.github.com>"]
+description = "Declarative, resource-oriented application core for Rust — model your domain, derive the rest. The keystone of the ash-* ecosystem."
+license = "Apache-2.0"
+readme = "README.md"
+repository = "https://github.com/ashforge-rs/ash-domain"
+keywords = ["framework", "resource", "declarative", "domain", "orm"]
+categories = ["asynchronous", "data-structures", "rust-patterns"]
+
+[features]
+# `derive` (on by default) enables `#[derive(Resource)]` via the workspace's
+# ash-macros crate. Disable for a macro-free build.
+default = ["derive"]
+derive = ["dep:ash-macros"]
+# --- shipped extensions & the HLC clock (each opt-in) ---------------------
+# The core is an executor over seams; the `ash-*` crates below are *consumers*
+# of those seams that this crate happens to ship. Each is behind its own
+# feature and **off by default**, so a default build links no `ash-*` code and
+# the dependency graph never mandates an extension you do not use.
+# `fsm` — the ash-fsm state-machine guard (`extension::fsm`).
+fsm = ["dep:ash-fsm"]
+# `audit` — the ash-log tamper-evident audit trail (`extension::audit`), and
+# the sandbox's `RecordingAuditBackend` when `sandbox` is also on.
+audit = ["dep:ash-log"]
+# `lock` — the ash-lock single-writer extension (`extension::lock`) and the
+# `ash_lock::Error -> Error::Contention` conversion.
+lock = ["dep:ash-lock"]
+# `hlc` — the ash-time Hybrid Logical Clock behind the `Clock` seam
+# (`AshTimeClock`). Without it, `SystemClock` is the shipped clock.
+hlc = ["dep:ash-time"]
+# Every shipped extension at once — a convenience, not a dependency.
+extensions = ["fsm", "audit", "lock"]
+# `sandbox` enables the deterministic side-effect harness (`ash_domain::sandbox`):
+# record every call your domain makes (values + outcome), script faults against
+# it, and assert yourself over the ordered log. Off by default — it is a testing
+# tool, not part of the runtime surface. Pulls in `uuid` for the seeded,
+# reproducible id generator; the runtime core needs no uuid dependency.
+sandbox = ["dep:uuid"]
+# `trace` instruments the executor with `tracing` spans/events (one span per
+# action, events for each pipeline stage — staged, authorized/denied,
+# before_action, persisted, …). Off by default: without it the instrumentation
+# compiles to nothing and `tracing` is not a dependency. When on, emission is
+# still gated at runtime by `Domain::enable_tracing()` (off until called), and
+# the domain only *emits* — the consumer installs a `tracing` subscriber to
+# decide where the trace goes.
+trace = ["dep:tracing"]
+# `flare` enables the ash-flare supervisor adapter (`ash_domain::flare`): a
+# `DomainWorker` that owns a `Domain`'s serving lifetime and drives its orderly
+# `close()` on shutdown, classifying serve-loop errors into faults (restart) vs
+# legitimate results (keep serving). Off by default — pulls in `ash-flare` and a
+# runtime `tokio` (for the bounded-deadline shutdown). Pure ash-domain needs
+# neither.
+flare = ["dep:ash-flare", "dep:tokio"]
+
+[dependencies]
+# Object-safe async traits so data layers, changes, validations, extensions, and
+# policies are all runtime-swappable. Matches the ash-* ecosystem convention.
+async-trait = "0.1"
+# Concurrent resolution inside the read pipeline (join over independent
+# relationship loads / computed fields); no executor, combinators only.
+futures = "0.3"
+serde = { version = "1", features = ["derive"] }
+bytes = { version = "1", features = ["serde"] }
+thiserror = "2"
+# Only for the `sandbox` feature's seeded, reproducible id generator (built from
+# seeded bytes — no `v4`/OS entropy). The runtime core mints string ids itself.
+uuid = { version = "1", optional = true }
+
+# Execution-trace instrumentation, behind the optional `trace` feature. The
+# domain only emits spans/events; the consumer installs a subscriber. Absent from
+# the build unless `trace` is enabled.
+tracing = { version = "0.1", optional = true }
+
+# The derive macros live in a sibling crate in this workspace (proc-macro crates
+# must stand alone); ash-domain re-exports them behind the `derive` feature.
+ash-macros = { version = "0.1", path = "ash-macros", optional = true }
+
+# --- ash-* ecosystem ---
+# ash-fsm powers the state-machine extension (guarded, validated transitions),
+# behind the `fsm` feature. Optional — a default build does not link it.
+ash-fsm = { version = "0.1", optional = true }
+# ash-time provides the Hybrid Logical Clock behind the `Clock` seam, behind the
+# `hlc` feature. ash-fsm depends on `ash-time = "1"` too, so the graph resolves
+# to one shared copy. Optional — a default build has `SystemClock` and no ash-time.
+ash-time = { version = "1", optional = true }
+# ash-log provides tamper-evident security audit logging behind the audit
+# extension (`after_action` records each change), gated by the `audit` feature.
+# Optional — a default build does not link it.
+ash-log = { version = "0.1", optional = true }
+# ash-lock powers the single-writer extension, gated by the `lock` feature:
+# `acquire` takes a per-record lease so concurrent writers of the same record
+# are serialized. Default features give the in-process `InMemoryBackend`; enable
+# ash-lock's `etcd` feature downstream for cross-process locking. Optional — a
+# default build does not link it.
+ash-lock = { version = "0.1", optional = true }
+# ash-log emits audit events as JSON and its metadata bag is serde_json-valued;
+# we build those values directly in the audit extension.
+serde_json = "1"
+
+# --- flare adapter (optional) ---
+# The ash-flare supervisor, behind the `flare` feature. Only linked when `flare`
+# is enabled.
+ash-flare = { version = "3", optional = true, default-features = false }
+# The `flare` adapter's bounded-deadline shutdown needs a runtime tokio (sync
+# primitives + timers). Optional so pure ash-domain stays runtime-agnostic; the
+# dev-dependency tokio below is unaffected.
+tokio = { version = "1", features = ["sync", "time", "rt"], optional = true }
+
+[dev-dependencies]
+# Doc examples and the integration tests drive the async API on a real runtime
+# (the doc examples double as smoke tests).
+tokio = { version = "1", features = ["rt", "rt-multi-thread", "macros"] }
+# Integration tests implement the async trait seams (changes, preparations,
+# generic handlers, policies) directly.
+async-trait = "0.1"
+# The `todo_sqlite` example implements the `DataLayer` seam over a real SQLite
+# database. Bundled driver, no system libsqlite3 needed.
+sqlx = { version = "0.8", default-features = false, features = ["runtime-tokio", "sqlite", "macros"] }
+
+[[example]]
+name = "sandbox_side_effect"
+# Uses the sandbox testkit; build/run with `--features sandbox`.
+required-features = ["sandbox"]
+
+[[example]]
+name = "sandbox_outbox"
+# Uses the sandbox testkit's transactional store; run with `--features sandbox`.
+required-features = ["sandbox"]
+
+[workspace]
+members = ["ash-macros"]
+
