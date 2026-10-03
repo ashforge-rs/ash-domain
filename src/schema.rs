@@ -1,6 +1,6 @@
 //! The registry, as data: [`DomainSchema`] and the JSON Schema export.
 //!
-//! A [`Domain`](crate::Domain) already knows the exact shape of every resource
+//! A [`Domain`] already knows the exact shape of every resource
 //! it will serve — that is what [`try_new`](crate::Domain::try_new) validated.
 //! This module hands that knowledge back as an inspectable, serializable value,
 //! so the things a resource-oriented framework is *supposed* to derive (an API
@@ -299,7 +299,7 @@ pub enum SchemaType {
     /// `bool`.
     Boolean,
     /// Any of the Rust integer types — all stored as an `i64`
-    /// ([`Value::Int`](crate::Value::Int)).
+    /// ([`Value::Int`]).
     Integer,
     /// `f32` / `f64`.
     Number,

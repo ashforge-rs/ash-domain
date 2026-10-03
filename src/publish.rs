@@ -3,14 +3,14 @@
 //! work.
 //!
 //! Two directions meet here, and the vocabulary keeps them apart. The domain
-//! **emits** a fact — it hands a [`DomainEvent`](crate::event::DomainEvent) to
+//! **emits** a fact — it hands a [`DomainEvent`] to
 //! its [`EventHandler`](crate::event::EventHandler)s (see
 //! [`Emitter`](crate::event::Emitter)). A consumer then **publishes** it —
 //! projects the event to a routing shape and carries it onto some transport.
 //! `emit` is the domain→others verb; `publish` is the others→outside-world verb.
 //!
 //! These are **seams, not engines**, and they sit *downstream* of the
-//! [`DomainEvent`](crate::event::DomainEvent) the [`Domain`](crate::Domain)
+//! [`DomainEvent`] the [`Domain`](crate::Domain)
 //! produces. The domain does not know about them; a consumer's
 //! [`EventHandler`](crate::event::EventHandler) chooses to turn an emitted event
 //! into one of these. The core ships no message broker or job runner — you
@@ -37,7 +37,7 @@ use crate::error::Result;
 use crate::event::DomainEvent;
 use crate::value::{Record, Value};
 
-/// A publishable projection of a [`DomainEvent`](crate::event::DomainEvent).
+/// A publishable projection of a [`DomainEvent`].
 ///
 /// This is **not** the domain event itself — it is one shape a consumer derives
 /// from an event when they choose to broadcast it, carrying just what a
@@ -85,7 +85,7 @@ impl Notification {
 
 /// Project a domain event into a publishable notification, dropping the commit
 /// timestamp (a routing concern, not a transport one — a consumer that needs it
-/// reads it off the [`DomainEvent`](crate::event::DomainEvent) instead).
+/// reads it off the [`DomainEvent`] instead).
 impl From<&DomainEvent> for Notification {
     fn from(event: &DomainEvent) -> Self {
         Self {

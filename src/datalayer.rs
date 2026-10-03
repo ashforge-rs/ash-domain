@@ -23,9 +23,9 @@
 //! [`Query::after`](crate::Query::after) (keyset) or
 //! [`Query::offset`](crate::Query::offset) (offset paging). A layer must return at
 //! most that many rows; the domain checks the count on the way back and fails
-//! the read ([`Error::DataLayer`](crate::Error::DataLayer)) if the layer overran
+//! the read ([`Error::DataLayer`]) if the layer overran
 //! it, rather than truncating and hiding the breach. Run
-//! [`conformance`](crate::datalayer::conformance) against your layer to check
+//! [`conformance`] against your layer to check
 //! both.
 //!
 //! The trait is deliberately minimal — just CRUD. Anything beyond it
@@ -77,7 +77,7 @@ pub trait DataLayer: Send + Sync {
     /// with [`Error::Unsupported`] — the skip happens before the row bound
     /// applies, so a page is `offset` then `limit`), and should read
     /// [`Query::tenant`] if it partitions by tenant. Any param it cannot execute
-    /// it should surface explicitly (e.g. [`Error::Unsupported`](crate::Error::Unsupported)) rather than
+    /// it should surface explicitly (e.g. [`Error::Unsupported`]) rather than
     /// degrade silently — the core no longer evaluates queries on the layer's
     /// behalf.
     async fn read(&self, query: &Query) -> Result<Vec<Record>>;
@@ -134,12 +134,12 @@ pub trait DataLayer: Send + Sync {
     /// put, a compare-and-swap. Reading the version and then writing in two
     /// steps reintroduces the very race this exists to close.
     ///
-    /// Return [`Error::Conflict`](crate::Error::Conflict) when the row exists but
+    /// Return [`Error::Conflict`] when the row exists but
     /// its version does not match, and
-    /// [`Error::NotFound`](crate::Error::NotFound) when there is no such row.
+    /// [`Error::NotFound`] when there is no such row.
     ///
     /// The default implementation **declines** with
-    /// [`Error::Unsupported`](crate::Error::Unsupported), so a layer that cannot
+    /// [`Error::Unsupported`], so a layer that cannot
     /// do a conditional write says so loudly instead of silently degrading to a
     /// last-writer-wins update. The domain only calls this for a resource that
     /// declares a [`version_attribute`](crate::Resource::version_attribute), so

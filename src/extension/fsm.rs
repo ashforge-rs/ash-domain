@@ -7,7 +7,7 @@
 //!
 //! The legal transitions are expressed with `ash-fsm`'s own
 //! [`Transition`](ash_fsm::Transition) /
-//! [`StateMachineConfig`](ash_fsm::StateMachineConfig) types, and checked with
+//! [`StateMachineConfig`] types, and checked with
 //! [`StateMachineConfig::is_transition_allowed`], so this is a genuine reuse of
 //! the state-machine crate rather than a re-implementation.
 //!

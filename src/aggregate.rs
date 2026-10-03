@@ -94,7 +94,7 @@ impl Aggregate {
     /// cannot push the roll-up down to storage can use after loading the related
     /// rows. A layer that *can* (a SQL `COUNT`/`SUM`) is free to ignore it and
     /// return the scalar directly. Numeric roll-ups operate on
-    /// [`Value::Int`](crate::Value::Int); non-numeric or absent fields are
+    /// [`Value::Int`]; non-numeric or absent fields are
     /// skipped.
     pub fn compute(&self, related: &[Record]) -> Value {
         match self.kind {

@@ -38,12 +38,12 @@ pub enum AttrType {
     /// relationship.
     _Ref(String),
     /// An **embedded resource**: a structured value stored *inside* the parent
-    /// (in one column, as a [`Value::Map`](crate::Value::Map)), not in a table of
+    /// (in one column, as a [`Value::Map`]), not in a table of
     /// its own. Carries the embedded resource's own attributes inline, so the
     /// write pipeline applies their declared defaults to the nested value — the
     /// embedded shape is known, not opaque.
     _Embed(Vec<Attribute>),
-    /// A repeated embedded resource: a [`Value::List`](crate::Value::List) of
+    /// A repeated embedded resource: a [`Value::List`] of
     /// [`Map`](crate::Value::Map)s, each carrying the embedded attributes.
     _EmbedList(Vec<Attribute>),
 }

@@ -6,7 +6,7 @@
 //! / StatsD / OpenTelemetry exporter, log lines, nothing at all — is the
 //! consumer's, implemented on their own type behind this trait.
 //!
-//! This is deliberately smaller than the [`trace`](crate::trace) seam. Trace
+//! This is deliberately smaller than the `trace` seam. Trace
 //! emits the *stages* of the pipeline into the `tracing` ecosystem (a fixed
 //! dependency, gated by a cargo feature). Metrics emits a single **per-action
 //! outcome** into a trait object the consumer supplies, so there is no feature

@@ -95,7 +95,7 @@ pub struct DomainConfig {
     pub resources: Vec<Arc<dyn ErasedResource>>,
     /// Extensions applied to every action.
     pub extensions: Vec<Arc<dyn Extension>>,
-    /// [`EventHandler`]s handed the [`DomainEvent`] produced after every
+    /// [`EventHandler`]s handed the [`DomainEvent`](crate::DomainEvent) produced after every
     /// committed action (default: none). This is the seam pub/sub, audit
     /// persistence, job-enqueue-on-write, and webhook fan-out build on: a
     /// handler decides what each event becomes.
@@ -216,7 +216,7 @@ impl DomainBuilder {
         self
     }
 
-    /// Add an [`EventHandler`] handed the [`DomainEvent`] after every committed
+    /// Add an [`EventHandler`] handed the [`DomainEvent`](crate::DomainEvent) after every committed
     /// action. Repeatable.
     pub fn event_handler(mut self, handler: Arc<dyn EventHandler>) -> Self {
         self.config.event_handlers.push(handler);
@@ -301,7 +301,7 @@ impl DomainBuilder {
         Domain::new(self.config, self.domain_context)
     }
 
-    /// Validate and build the [`Domain`], returning [`Error::Invalid`] on an
+    /// Validate and build the [`Domain`], returning [`Error::Invalid`](crate::Error::Invalid) on an
     /// inconsistent configuration — the builder analogue of [`Domain::try_new`].
     pub fn try_build(self) -> Result<Domain> {
         Domain::try_new(self.config, self.domain_context)

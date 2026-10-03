@@ -433,7 +433,7 @@ pub trait Store: Send + Sync {
     /// The [`DataLayer`] the CRUD actions run against.
     fn layer(&self) -> &dyn DataLayer;
 
-    /// **Optional atomicity capability:** open a [`Transaction`] the write
+    /// **Optional atomicity capability:** open a [`Transaction`](crate::Transaction) the write
     /// pipeline runs inside, or `Ok(None)` (the default) to decline.
     ///
     /// When a store returns `Some(txn)`, the [`Domain`](crate::Domain) persists
@@ -778,7 +778,7 @@ impl<'a> HandlerContext<'a> {
     }
 
     /// Borrow a shared client of type `T` from the domain's
-    /// [`DomainContext`](crate::DomainContext), if one was registered when the
+    /// [`DomainContext`], if one was registered when the
     /// domain was built.
     ///
     /// This is how a handler reaches the long-lived, domain-scoped handles — an

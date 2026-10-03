@@ -164,7 +164,7 @@ pub struct Query {
     /// Resume a previous page: return only rows that fall **after** this cursor
     /// in the query's [`sort`](Query::sort) order.
     ///
-    /// Produced by [`Page::cursor`] from a previous read and passed back
+    /// Produced by [`Page::cursor`](crate::Page::cursor) from a previous read and passed back
     /// verbatim. The layer decodes it with [`Cursor::keys`] and turns it into a
     /// keyset predicate. Meaningless without a `sort`, which is why the domain
     /// rejects the combination.
@@ -240,7 +240,7 @@ impl SortKey {
 /// an `OFFSET` has and this does not.
 ///
 /// It is deliberately **opaque to callers**: build one only with
-/// [`Page::cursor`], and read it only from inside a data layer with
+/// [`Page::cursor`](crate::Page::cursor), and read it only from inside a data layer with
 /// [`keys`](Cursor::keys). Callers pass it back verbatim.
 #[derive(Clone, Debug, PartialEq)]
 pub struct Cursor {
@@ -259,7 +259,7 @@ impl Cursor {
 
     /// Build a cursor from raw sort-key values. For a data layer that
     /// round-trips a cursor through its own encoding; ordinary callers use
-    /// [`Page::cursor`].
+    /// [`Page::cursor`](crate::Page::cursor).
     pub fn from_keys(keys: Vec<Value>) -> Self {
         Self { keys }
     }

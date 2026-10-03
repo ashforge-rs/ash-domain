@@ -7,7 +7,7 @@
 //! own is two things this module provides:
 //!
 //! 1. **A close gate** — a shared [`AtomicBool`], the exact shape of the existing
-//!    [`trace`](crate::trace) gate. Once
+//!    `trace` gate. Once
 //!    [`begin_close`](crate::Domain::begin_close) flips it, every new call to
 //!    [`handle_action`](crate::Domain::handle_action) fails fast with
 //!    [`Error::Closing`](crate::Error::Closing) **before** it does anything

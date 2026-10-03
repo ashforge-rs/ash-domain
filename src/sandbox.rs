@@ -50,7 +50,7 @@
 //!
 //! **Transactional scenarios.** A plain [`Sandbox::context`] declines
 //! transactions, so it cannot reach the domain's transactional path at all — and
-//! the [`EventHandler::stage`](crate::event::EventHandler::stage) outbox pass is
+//! the [`EventHandler::stage`] outbox pass is
 //! *refused outright* by the domain against such a store.
 //! [`Sandbox::transactional_context`] hands you one that offers a recorded,
 //! fault-injectable transaction instead: lifecycle lands as kind `"txn"`
@@ -188,7 +188,7 @@ impl Sandbox {
     ///
     /// Use this whenever the scenario touches the transactional path: rollback
     /// ordering, an `after_action` failure undoing a write, or the
-    /// [`EventHandler::stage`](crate::event::EventHandler::stage) outbox pass —
+    /// [`EventHandler::stage`] outbox pass —
     /// which the domain *refuses to run at all* against a store that declines
     /// transactions, so a plain [`context`](Sandbox::context) cannot reach it.
     ///
@@ -999,7 +999,7 @@ impl<L: DataLayer> DataLayer for SpyLayer<L> {
 /// A plain `Arc<SpyLayer<_>>` is already a `Store`, but it *declines*
 /// transactions (`begin` returns `None`, the blanket default), so a scenario
 /// using one can never reach the domain's transactional path — the rollback
-/// ordering, or the [`EventHandler::stage`](crate::event::EventHandler::stage)
+/// ordering, or the [`EventHandler::stage`]
 /// outbox pass, which the domain refuses to run at all without a transaction to
 /// join. Wrap the same layer in this and that whole path opens up.
 ///

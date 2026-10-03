@@ -367,7 +367,7 @@ pub enum ActionInput {
         /// The staged input parameters, one per row.
         rows: Vec<Record>,
     },
-    /// A read [`Query`](crate::query::Query). Boxed because a `Query` is much
+    /// A read [`Query`]. Boxed because a `Query` is much
     /// larger than the other variants; the box keeps `ActionInput` small.
     Query(Box<Query>),
     /// No parameters, with an optional target `id`. `Some(id)` on a

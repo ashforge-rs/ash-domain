@@ -82,7 +82,7 @@ pub struct DomainEvent {
     /// record result.
     pub records: Vec<Record>,
     /// When the action committed, in milliseconds since the Unix epoch, read
-    /// from the domain's [`Clock`](crate::Clock). A domain fact carries when it
+    /// from the domain's [`Clock`]. A domain fact carries when it
     /// happened, so a consumer can order or timestamp it without a clock of
     /// their own.
     pub at: i64,
@@ -216,7 +216,7 @@ pub trait EventHandler: Send + Sync {
 /// anywhere holding the domain's shared context, not only from the commit path.
 ///
 /// The [`Domain`](crate::Domain) builds one at construction over its registered
-/// [`EventHandler`]s and its [`Clock`](crate::Clock), and **registers it in the
+/// [`EventHandler`]s and its [`Clock`], and **registers it in the
 /// [`DomainContext`](crate::DomainContext)** as a shared client. So any code that
 /// can reach that context can emit:
 ///
@@ -271,7 +271,7 @@ impl Emitter {
     }
 
     /// Build a [`DomainEvent`] from its parts — stamping `at` from the emitter's
-    /// [`Clock`](crate::Clock) — and [`emit`](Emitter::emit) it. A convenience for
+    /// [`Clock`] — and [`emit`](Emitter::emit) it. A convenience for
     /// the common case where the caller doesn't hold a pre-built event.
     ///
     /// `actor` and `tenant` are left unset (an out-of-band event infers neither);

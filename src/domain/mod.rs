@@ -7,9 +7,9 @@
 //!
 //! Every action runs through **one entry point**,
 //! [`handle_action`](Domain::handle_action): the resource is resolved by type, the
-//! action by name, and the *shape* of the [`ActionInput`](crate::ActionInput)
+//! action by name, and the *shape* of the [`ActionInput`]
 //! (params, an id, a query) selects create / read / update / destroy / generic. It
-//! returns an [`ActionOutcome`](crate::ActionOutcome) of raw
+//! returns an [`ActionOutcome`] of raw
 //! [`Record`]s, which you project into the resource's typed
 //! [`Data`](crate::Resource::Data) with
 //! [`ActionOutcome::into_data`](crate::ActionOutcome::into_data). The
@@ -56,7 +56,7 @@
 //! re-authorization, and a read extension's `after_read` sees rows *before*
 //! attribute redaction. Policies gate the caller; extensions are trusted to
 //! uphold the domain's rules from within. See
-//! [`Extension`](crate::extension::Extension) for the full trust boundary.
+//! [`Extension`] for the full trust boundary.
 //!
 //! The domain runs **no** built-in attribute validation. Presence, ranges,
 //! formats, and cross-field rules are all the consumer's job, expressed as
@@ -193,7 +193,7 @@ impl Domain {
     ///   registered and carries both join attributes;
     /// - every aggregate rolls up a declared relationship, and aggregate /
     ///   computed names collide with neither each other nor the attributes;
-    /// - a [`TenantStrategy::Attribute`] discriminator exists as an attribute;
+    /// - a [`TenantStrategy::Attribute`](crate::TenantStrategy::Attribute) discriminator exists as an attribute;
     /// - every policy scope refers to a registered resource, and an
     ///   action/attribute scope to a declared action/attribute.
     pub fn try_new(config: DomainConfig, mut domain_context: DomainContext) -> Result<Self> {
@@ -349,7 +349,7 @@ impl Domain {
     ///   interrupted — quiesce those callers yourself (or supervise the domain
     ///   with a [`DomainWorker`](crate::flare::DomainWorker), which does the
     ///   bounded wait) before calling this.
-    /// - **Every client is closed even if one fails.** A [`Closable::close`] that
+    /// - **Every client is closed even if one fails.** A [`Closable::close`](crate::Closable::close) that
     ///   returns `Err` does not stop the rest; all errors are collected and the
     ///   **first** is returned (with a count), so a failed teardown is visible but
     ///   never strands the other clients.
@@ -400,12 +400,12 @@ impl Domain {
         &self.domain_context
     }
 
-    /// The domain's [`Emitter`] — the handle for emitting [`DomainEvent`]s **out
+    /// The domain's [`Emitter`] — the handle for emitting [`DomainEvent`](crate::DomainEvent)s **out
     /// of band** (from anywhere, not only the commit path). It fans out to the
-    /// same registered [`EventHandler`]s.
+    /// same registered [`EventHandler`](crate::EventHandler)s.
     ///
     /// The same emitter is also registered in the
-    /// [`DomainContext`](crate::DomainContext), so a generic action's
+    /// [`DomainContext`], so a generic action's
     /// [`HandlerContext`](crate::HandlerContext) reaches it with
     /// `ctx.client::<Emitter>()`. Use this accessor from service code that holds
     /// the [`Domain`]. Cloneable and cheap. See [`Emitter`] for the "these are not
@@ -493,7 +493,7 @@ impl Domain {
     /// | [`ActionInput::generic`] (params)            | generic |
     ///
     /// The result is an [`ActionOutcome`] carrying raw [`Record`]s (a write yields
-    /// one, a read many, a generic a [`Value`], a destroy nothing). Project it into
+    /// one, a read many, a generic a [`Value`](crate::Value), a destroy nothing). Project it into
     /// a typed [`Data`](crate::Resource::Data) with
     /// [`ActionOutcome::into_data`] / [`into_data_vec`](ActionOutcome::into_data_vec)
     /// when you want typing.

@@ -250,7 +250,7 @@ pub use value::{FromRecord, FromValue, IntoRecord, Record, Value};
 /// - Aggregates: `#[aggregate(count|sum|min|max|exists, name = "...",
 ///   relationship = "...", field = "...")]`, repeatable (`field` for
 ///   sum/min/max). Computed fields reference a `Computer` type, so they stay a
-///   hand-written [`Resource::computed`](crate::Resource::computed) override.
+///   hand-written [`Resource::computed`] override.
 /// - Typed interface: for the default CRUD actions the derive also generates
 ///   compile-checked associated fns — `Note::create(&domain, &mut ctx, params)`,
 ///   `read`, `get` (one row by primary key), `update`, `destroy` — so you name
@@ -263,7 +263,7 @@ pub use value::{FromRecord, FromValue, IntoRecord, Record, Value};
 ///   `domain.handle_action::<Note>(&mut ctx, "completed", ActionInput::update(id, params))`.
 ///   The attribute is declarative — it names the action and its shape (`create` /
 ///   `update` / `destroy` / `read`); the action's *behavior* (the
-///   [`Change`](crate::action::Change) that sets `completed = true`) is attached as
+///   [`Change`] that sets `completed = true`) is attached as
 ///   explicit code. Generic actions, which
 ///   need a handler at declaration, stay on the hand-written `actions()` path and
 ///   run via `ActionInput::generic(input)`.
