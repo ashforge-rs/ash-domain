@@ -10,7 +10,7 @@ checksum = "683d7910e743518b0e34f1186f92494becacb047c7b6bf616c96772180fef923"
 
 [[package]]
 name = "ash-domain"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "ash-domain-macros",
  "ash-flare",
@@ -32,7 +32,7 @@ dependencies = [
 
 [[package]]
 name = "ash-domain-macros"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "proc-macro2",
  "quote",
