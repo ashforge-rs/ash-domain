@@ -59,9 +59,9 @@ dependencies = [
 
 [[package]]
 name = "ash-fsm"
-version = "0.1.0"
+version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "13c9dd129311436f62112bc42b05ee61762eb0427b198965e442f3dcd386d0c8"
+checksum = "d099b9a8c66d3832378108d78c9b4ed58f707ec1f3cb89536bc8118c1f9e8766"
 dependencies = [
  "ash-time",
  "serde",
