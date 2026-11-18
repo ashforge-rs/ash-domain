@@ -71,9 +71,9 @@ dependencies = [
 
 [[package]]
 name = "ash-lock"
-version = "0.1.0"
+version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b31464396742c1143ab38a39508cbebb9a73e5f86bc898cf6fb00d120c90fa9b"
+checksum = "baa06227894fb749eaa6c87e2130e7160e5512008a1b22f3c01d06693749dc78"
 dependencies = [
  "async-trait",
  "dashmap",
